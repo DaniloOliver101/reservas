@@ -1,4 +1,4 @@
-package br.com.reservas_api.model;
+package br.com.reservas_api.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

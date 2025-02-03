@@ -2,7 +2,7 @@ package br.com.reservas_api.service.impl;
 
 
 
-import br.com.reservas_api.model.User;
+import br.com.reservas_api.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

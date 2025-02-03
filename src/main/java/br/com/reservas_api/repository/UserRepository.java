@@ -1,7 +1,7 @@
 package br.com.reservas_api.repository;
 
 
-import br.com.reservas_api.model.User;
+import br.com.reservas_api.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

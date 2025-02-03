@@ -1,46 +1,37 @@
 package br.com.reservas_api.controller;
 
-import br.com.reservas_api.controller.request.LoginRequest;
-import br.com.reservas_api.model.User;
-import br.com.reservas_api.repository.UserRepository;
-import br.com.reservas_api.security.JwtUtil;
-import br.com.reservas_api.service.impl.UserDetailsImpl;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import br.com.reservas_api.controller.request.LoginRequestDTO;
+import br.com.reservas_api.controller.request.RegisterRequestDTO;
+import br.com.reservas_api.controller.response.ResponseDTO;
+import br.com.reservas_api.infra.security.LoginService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
-private
+    private final LoginService loginService;
 
-    private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
-
-    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtUtil = jwtUtil;
-    }
-
-    @PostMapping("/register")
-    public String register(@RequestBody User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        return "Usuário registrado com sucesso!";
-    }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request) {
-
-
-
-        if (!passwordEncoder.matches(request.get("password"), user.getPassword())) {
-            throw new RuntimeException("Senha inválida");
+    public ResponseEntity login(@RequestBody LoginRequestDTO body) {
+        try {
+            return ResponseEntity.ok(loginService.login(body));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new ResponseDTO(e.getMessage(), null));
         }
+    }
 
-        return jwtUtil.generateToken(user);
+
+    @PostMapping("/register")
+    public ResponseEntity<ResponseDTO> register(@RequestBody RegisterRequestDTO body) {
+        try {
+            return ResponseEntity.ok(loginService.register(body));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(new ResponseDTO(e.getMessage(), null));
+        }
     }
 }
